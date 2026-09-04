@@ -1,0 +1,10 @@
+# heroui-agents-md
+.heroui-docs/
+
+# Dependencies and build output
+node_modules/
+.next/
+.expo/
+dist/
+.env
+.env.local

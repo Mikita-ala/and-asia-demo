@@ -1,0 +1,56 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define employee: [user] or manager or administrator
+    define manager: [user] or administrator
+    define administrator: [user]
+    define commercial_director: [user]
+    define category_manager: [user]
+    define logistics: [user]
+    define can_manage_users: administrator
+    define can_manage_references: administrator
+    define can_view_audit_log: administrator
+    define can_upload_sales_plans: commercial_director
+    define can_manage_calculator: commercial_director
+    define can_view_reporting: commercial_director or administrator
+    define can_manage_planograms: category_manager
+    define can_manage_assortment: category_manager
+    define can_manage_knowledge_base: category_manager
+    define can_process_orders: logistics
+    define can_export_orders: logistics
+
+type document
+  relations
+    # Grant access by writing a tuple such as
+    # document:work-rules#viewer@organization:and-asia#employee.
+    # The organization relations provide the employee -> manager -> administrator hierarchy.
+    define viewer: [user, organization#employee, organization#manager, organization#administrator]
+
+type region
+  relations
+    define territorial_manager: [user]
+    define can_manage_region: territorial_manager
+    define can_approve_requests: territorial_manager
+    define can_view_region_reporting: territorial_manager
+
+type branch
+  relations
+    define region: [region]
+    define territorial_manager: [user] or territorial_manager from region
+    define senior_consultant: [user]
+    define consultant: [user]
+    define merchandiser: [user]
+    define employee: territorial_manager or senior_consultant or consultant or merchandiser
+    define order_enabled: [user]
+    define can_check_in: territorial_manager or senior_consultant or consultant or merchandiser
+    define can_submit_photo_audit: territorial_manager or senior_consultant or consultant or merchandiser
+    define can_view_plan_fact: territorial_manager or senior_consultant or consultant
+    define can_complete_training: territorial_manager or senior_consultant or consultant or merchandiser
+    define can_view_own_tasks: territorial_manager or senior_consultant or consultant or merchandiser
+    define can_create_order: senior_consultant or order_enabled
+    define can_manage_branch_tasks: territorial_manager
+    define can_control_shifts: territorial_manager
